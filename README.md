@@ -1,6 +1,13 @@
+<div align="center">
+  <img width="1200" height="475" alt="Bilal's Slingshot Banner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+  
+  <br/>
+  
   <h1>🎯 Bilal's Slingshot 🎯</h1>
   
   <p><strong>A Next-Gen AI-Powered Webcam Bubble Shooter!</strong></p>
+
+  <h3>🎮 <a href="https://bilals-slingshot-352425888965.us-central1.run.app/">PLAY LIVE DEMO HERE</a> 🎮</h3>
 
   <p>
     <img src="https://img.shields.io/badge/Powered%20by-Gemini%203%20Flash-blue?style=for-the-badge&logo=google" alt="Gemini 3 Flash">
