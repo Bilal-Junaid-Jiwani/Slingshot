@@ -1,7 +1,6 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
+ * Copyright (c) 2026 Bilal
+ */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { getStrategicHint, TargetCandidate } from '../services/geminiService';
@@ -52,7 +51,7 @@ const adjustColor = (color: string, amount: number) => {
     return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 };
 
-const GeminiSlingshot: React.FC = () => {
+const BilalSlingshot: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const gameContainerRef = useRef<HTMLDivElement>(null);
@@ -1063,11 +1062,10 @@ const GeminiSlingshot: React.FC = () => {
         </div>
         
         <div className="p-3 bg-[var(--color-zinc-800)] border-t-2 border-[var(--color-gallery-white)] text-center">
-            <p className="text-[10px] text-gray-500 font-medium">Powered by Google Gemini 3 Flash</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default GeminiSlingshot;
+export default BilalSlingshot;

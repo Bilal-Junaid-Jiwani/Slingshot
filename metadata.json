@@ -1,6 +1,6 @@
 {
-  "name": "Gemini Slingshot",
-  "description": "Gemini 3 Flash is your strategic co-pilot, analyzing the board and suggesting the best shots in this webcam bubble shooter.",
+  "name": "Bilal's Slingshot",
+  "description": "AI is your strategic co-pilot, analyzing the board and suggesting the best shots in this webcam bubble shooter.",
   "requestFramePermissions": [
     "camera"
   ],

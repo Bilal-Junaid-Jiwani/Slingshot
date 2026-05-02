@@ -1,7 +1,6 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
+ * Copyright (c) 2026 Bilal
+ */
 
 export interface Point {
   x: number;

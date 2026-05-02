@@ -1,7 +1,6 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
+ * Copyright (c) 2026 Bilal
+ */
 
 import { GoogleGenAI, Type } from "@google/genai";
 import { StrategicHint, AiResponse, DebugInfo } from "../types";
@@ -139,7 +138,7 @@ export const getStrategicHint = async (
         ]
       },
       config: {
-        maxOutputTokens: 2048, // Increased to ensure full JSON response
+        maxOutputTokens: 256, // Reduced to speed up response time
         temperature: 0.4,
         responseMimeType: "application/json" 
         // NOTE: responseSchema removed to avoid empty/blocked responses

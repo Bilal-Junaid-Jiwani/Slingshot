@@ -1,15 +1,14 @@
 /**
- * @license
- * SPDX-License-Identifier: Apache-2.0
-*/
+ * Copyright (c) 2026 Bilal
+ */
 
 import React from 'react';
-import GeminiSlingshot from './components/GeminiSlingshot';
+import BilalSlingshot from './components/BilalSlingshot';
 
 const App: React.FC = () => {
   return (
     <div className="w-full h-full">
-      <GeminiSlingshot />
+      <BilalSlingshot />
     </div>
   );
 };
