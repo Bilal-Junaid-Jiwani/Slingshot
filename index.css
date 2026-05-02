@@ -1,1 +1,50 @@
 @import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Anton", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-brutal-black: #050505;
+  --color-neon-accent: #ccff00;
+  --color-gallery-white: #f4f4f0;
+  --color-zinc-900: #18181b;
+  --color-zinc-800: #27272a;
+}
+
+:root {
+  --neon-green: #ccff00;
+  --brutal-black: #050505;
+  --gallery-white: #f4f4f0;
+}
+
+body {
+  margin: 0;
+  background-color: var(--brutal-black);
+  color: var(--gallery-white);
+  overflow: hidden;
+  font-family: "Space Grotesk", sans-serif;
+}
+
+canvas {
+  transform: scaleX(-1); /* Mirror effect for natural feel */
+}
+video {
+  transform: scaleX(-1); /* Mirror effect for natural feel */
+  display: none; /* We draw video to canvas, so hide original */
+}
+
+/* Scrollbar customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--brutal-black);
+  border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #333;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--neon-green);
+}

@@ -29,7 +29,7 @@ const MAX_FORCE_MULT = 0.45;
 const COLOR_CONFIG: Record<BubbleColor, { hex: string, points: number, label: string }> = {
   red:    { hex: '#ef5350', points: 100, label: 'Red' },     // Material Red 400
   blue:   { hex: '#42a5f5', points: 150, label: 'Blue' },    // Material Blue 400
-  green:  { hex: '#66bb6a', points: 200, label: 'Green' },   // Material Green 400
+  green:  { hex: '#ccff00', points: 200, label: 'Green' },   // Material Green 400
   yellow: { hex: '#ffee58', points: 250, label: 'Yellow' },  // Material Yellow 400
   purple: { hex: '#ab47bc', points: 300, label: 'Purple' },  // Material Purple 400
   orange: { hex: '#ffa726', points: 500, label: 'Orange' }   // Material Orange 400
@@ -346,7 +346,7 @@ const GeminiSlingshot: React.FC = () => {
     // Main Sphere Gradient (gives 3D depth)
     // Shifted focus to top-left for light source
     const grad = ctx.createRadialGradient(x - radius * 0.3, y - radius * 0.3, radius * 0.1, x, y, radius);
-    grad.addColorStop(0, '#ffffff');             // Specular highlight center (brightest)
+    grad.addColorStop(0, '#f4f4f0');             // Specular highlight center (brightest)
     grad.addColorStop(0.2, baseColor);           // Main color body
     grad.addColorStop(1, adjustColor(baseColor, -60)); // Shadowed edge (darkest)
 
@@ -426,7 +426,7 @@ const GeminiSlingshot: React.FC = () => {
       // Draw Video Feed
       ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
       // Material Dark Overlay
-      ctx.fillStyle = 'rgba(18, 18, 18, 0.85)';
+      ctx.fillStyle = 'rgba(5, 5, 5, 0.90)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // --- Hand Tracking ---
@@ -448,14 +448,14 @@ const GeminiSlingshot: React.FC = () => {
         pinchDist = Math.sqrt(dx * dx + dy * dy);
 
         if (drawingUtils) {
-           drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {color: '#669df6', lineWidth: 1});
-           drawingUtils.drawLandmarks(landmarks, {color: '#aecbfa', lineWidth: 1, radius: 2});
+           drawingUtils.drawConnectors(landmarks, HandLandmarker.HAND_CONNECTIONS, {color: '#ccff00', lineWidth: 2});
+           drawingUtils.drawLandmarks(landmarks, {color: '#f4f4f0', lineWidth: 2, radius: 3});
         }
         
         // Cursor
         ctx.beginPath();
         ctx.arc(handPos.x, handPos.y, 20, 0, Math.PI * 2);
-        ctx.strokeStyle = pinchDist < PINCH_THRESHOLD ? '#66bb6a' : '#ffffff';
+        ctx.strokeStyle = pinchDist < PINCH_THRESHOLD ? '#ccff00' : '#f4f4f0';
         ctx.lineWidth = 2;
         ctx.stroke();
       }
@@ -770,9 +770,10 @@ const GeminiSlingshot: React.FC = () => {
 
     const startCamera = async () => {
       try {
+        if (video.srcObject) return;
         const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 1280, height: 720 } });
         video.srcObject = stream;
-        video.play();
+        await video.play().catch(e => console.error("Video play error:", e));
       } catch (err) {
         console.error("Camera error:", err);
       }
@@ -803,26 +804,27 @@ const GeminiSlingshot: React.FC = () => {
         if (video.srcObject) {
            const stream = video.srcObject as MediaStream;
            stream.getTracks().forEach(t => t.stop());
+           video.srcObject = null;
         }
         if (landmarker) landmarker.close();
     };
   }, [initGrid]);
 
   const recColorConfig = aiRecommendedColor ? COLOR_CONFIG[aiRecommendedColor] : null;
-  const borderColor = recColorConfig ? recColorConfig.hex : '#444746';
+  const borderColor = recColorConfig ? recColorConfig.hex : 'var(--color-gallery-white)';
 
   return (
-    <div className="flex w-full h-screen bg-[#121212] overflow-hidden font-roboto text-[#e3e3e3]">
+    <div className="flex w-full h-screen bg-[var(--brutal-black)] overflow-hidden font-sans text-[var(--color-gallery-white)]">
       
       {/* MOBILE/TABLET BLOCKER OVERLAY */}
-      <div className="fixed inset-0 z-[100] bg-[#121212] flex flex-col items-center justify-center p-8 text-center md:hidden">
-         <Monitor className="w-16 h-16 text-[#ef5350] mb-6 animate-pulse" />
-         <h2 className="text-2xl font-bold text-[#e3e3e3] mb-4">Desktop View Required</h2>
-         <p className="text-[#c4c7c5] max-w-md text-lg leading-relaxed">
+      <div className="fixed inset-0 z-[100] bg-[var(--brutal-black)] flex flex-col items-center justify-center p-8 text-center md:hidden">
+         <Monitor className="w-16 h-16 text-[var(--color-neon-accent)] mb-6 animate-pulse" />
+         <h2 className="font-display text-4xl uppercase tracking-wider text-[var(--color-gallery-white)] mb-4">Desktop View Required</h2>
+         <p className="text-gray-300 max-w-md text-lg leading-relaxed">
            This experience requires a larger screen for the webcam tracking and game mechanics.
          </p>
-         <div className="mt-8 flex items-center gap-2 text-sm text-[#757575] uppercase tracking-wider font-bold">
-           <div className="w-2 h-2 bg-[#42a5f5] rounded-full"></div>
+         <div className="mt-8 flex items-center gap-2 text-sm text-gray-400 uppercase tracking-wider font-bold">
+           <div className="w-2 h-2 bg-[var(--color-neon-accent)] text-black rounded-none"></div>
            Please maximize window
          </div>
       </div>
@@ -834,10 +836,10 @@ const GeminiSlingshot: React.FC = () => {
 
         {/* Loading Overlay */}
         {loading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-[#121212] z-50">
+            <div className="absolute inset-0 flex items-center justify-center bg-[var(--brutal-black)] z-50">
             <div className="flex flex-col items-center">
-                <Loader2 className="w-12 h-12 text-[#42a5f5] animate-spin mb-4" />
-                <p className="text-[#e3e3e3] text-lg font-medium">Starting Engine...</p>
+                <Loader2 className="w-12 h-12 text-[var(--color-neon-accent)] animate-spin mb-4" />
+                <p className="text-[var(--color-gallery-white)] text-lg font-medium">Starting Engine...</p>
             </div>
             </div>
         )}
@@ -848,28 +850,28 @@ const GeminiSlingshot: React.FC = () => {
             className="absolute left-1/2 -translate-x-1/2 z-50 flex flex-col items-center justify-center pointer-events-none"
             style={{ bottom: '220px', transform: 'translate(-50%, 50%)' }}
           >
-             <div className="w-[72px] h-[72px] rounded-full border-4 border-t-[#a8c7fa] border-r-[#a8c7fa] border-b-transparent border-l-transparent animate-spin" />
-             <p className="mt-4 text-[#a8c7fa] font-bold text-xs tracking-widest animate-pulse">ANALYZING...</p>
+             <div className="w-[72px] h-[72px] rounded-none border-4 border-t-[var(--color-neon-accent)] border-t-2 border-r-[var(--color-neon-accent)] border-r-2 border-b-transparent border-l-transparent animate-spin" />
+             <p className="mt-4 text-[var(--color-neon-accent)] font-bold text-xs tracking-widest animate-pulse">ANALYZING...</p>
           </div>
         )}
 
         {/* HUD: Score Card */}
         <div className="absolute top-6 left-6 z-40">
-            <div className="bg-[#1e1e1e] p-5 rounded-[28px] border border-[#444746] shadow-2xl flex items-center gap-4 min-w-[180px]">
-                <div className="bg-[#42a5f5]/20 p-3 rounded-full">
-                    <Trophy className="w-6 h-6 text-[#42a5f5]" />
+            <div className="bg-[var(--color-zinc-900)] p-5 rounded-none border-2 border-[var(--color-gallery-white)] shadow-[8px_8px_0_0_var(--color-neon-accent)] flex items-center gap-4 min-w-[180px]">
+                <div className="bg-[var(--color-neon-accent)] bg-opacity-20 p-3 rounded-none">
+                    <Trophy className="w-6 h-6 text-[var(--brutal-black)]" />
                 </div>
                 <div>
-                    <p className="text-xs text-[#c4c7c5] uppercase tracking-wider font-medium">Score</p>
-                    <p className="text-3xl font-bold text-white">{score.toLocaleString()}</p>
+                    <p className="text-xs text-gray-300 uppercase tracking-widest font-bold">Score</p>
+                    <p className="text-5xl tracking-widest font-display text-[var(--color-neon-accent)]">{score.toLocaleString()}</p>
                 </div>
             </div>
         </div>
 
         {/* HUD: Color Picker */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40">
-            <div className="bg-[#1e1e1e] px-6 py-4 rounded-[32px] border border-[#444746] shadow-2xl flex items-center gap-4">
-                <p className="text-xs text-[#c4c7c5] uppercase font-bold tracking-wider mr-2 hidden md:block">Select Color</p>
+            <div className="bg-[var(--color-zinc-900)] px-6 py-4 rounded-none border-2 border-[var(--color-gallery-white)] shadow-[8px_8px_0_0_var(--color-neon-accent)] flex items-center gap-4">
+                <p className="text-xs text-gray-300 uppercase font-bold tracking-wider mr-2 hidden md:block">Select Color</p>
                 {availableColors.length === 0 ? (
                     <p className="text-sm text-gray-500">No ammo</p>
                 ) : (
@@ -882,8 +884,8 @@ const GeminiSlingshot: React.FC = () => {
                             <button
                                 key={color}
                                 onClick={() => setSelectedColor(color)}
-                                className={`relative w-14 h-14 rounded-full transition-all duration-300 transform flex items-center justify-center
-                                    ${isSelected ? 'scale-110 ring-4 ring-white/50 z-10' : 'opacity-80 hover:opacity-100 hover:scale-105'}
+                                className={`relative w-14 h-14 rounded-none transition-all duration-300 transform flex items-center justify-center
+                                    ${isSelected ? 'scale-110 ring-4 ring-[var(--color-neon-accent)] z-10' : 'opacity-80 hover:opacity-100 hover:scale-105'}
                                 `}
                                 style={{ 
                                     background: `radial-gradient(circle at 35% 35%, ${config.hex}, ${adjustColor(config.hex, -60)})`,
@@ -893,13 +895,13 @@ const GeminiSlingshot: React.FC = () => {
                                 }}
                             >
                                 {/* Glossy highlight for button */}
-                                <div className="absolute top-2 left-3 w-4 h-2 bg-white/40 rounded-full transform -rotate-45 filter blur-[1px]" />
+                                <div className="absolute top-2 left-3 w-4 h-2 bg-white/20 rounded-none transform -rotate-45 filter blur-[1px]" />
                                 
                                 {isRecommended && !isSelected && (
-                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-white text-black text-[10px] font-bold flex items-center justify-center rounded-full animate-bounce shadow-md">!</span>
+                                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-neon-accent)] text-black text-[10px] font-bold flex items-center justify-center rounded-none animate-bounce shadow-md">!</span>
                                 )}
                                 {isSelected && (
-                                    <MousePointerClick className="w-6 h-6 text-white/90 drop-shadow-md" />
+                                    <MousePointerClick className="w-6 h-6 text-[var(--color-neon-accent)]/90 drop-shadow-md" />
                                 )}
                             </button>
                         )
@@ -911,50 +913,50 @@ const GeminiSlingshot: React.FC = () => {
         {/* Bottom Tip */}
         {!isPinching.current && !isFlying.current && !isAiThinking && (
             <div className="absolute bottom-28 left-1/2 -translate-x-1/2 z-30 pointer-events-none opacity-50">
-                <div className="flex items-center gap-2 bg-[#1e1e1e]/90 px-4 py-2 rounded-full border border-[#444746] backdrop-blur-sm">
-                    <Play className="w-3 h-3 text-[#42a5f5] fill-current" />
-                    <p className="text-[#e3e3e3] text-xs font-medium">Pinch & Pull to Shoot</p>
+                <div className="flex items-center gap-2 bg-[var(--color-zinc-900)]/90 px-4 py-2 rounded-none border-2 border-[var(--color-gallery-white)] backdrop-blur-sm">
+                    <Play className="w-3 h-3 text-[var(--brutal-black)] fill-current" />
+                    <p className="text-[var(--color-gallery-white)] text-xs font-medium">Pinch & Pull to Shoot</p>
                 </div>
             </div>
         )}
       </div>
 
       {/* RIGHT: Debug Panel */}
-      <div className="w-[380px] bg-[#1e1e1e] border-l border-[#444746] flex flex-col h-full overflow-hidden shadow-2xl">
+      <div className="w-[380px] bg-[var(--color-zinc-900)] border-l-2 border-[var(--color-gallery-white)] flex flex-col h-full overflow-hidden shadow-[8px_8px_0_0_var(--color-neon-accent)]">
         
         {/* FLASH STRATEGY SECTION - PROMINENT */}
         <div 
-            className="p-5 border-b-4 transition-colors duration-500 flex flex-col gap-2"
+            className="p-5 border-b-4 border-b-[var(--color-gallery-white)] transition-colors duration-500 flex flex-col gap-2"
             style={{ 
-                backgroundColor: '#252525',
+                backgroundColor: 'var(--color-zinc-900)',
                 borderColor: borderColor
             }}
         >
              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <BrainCircuit className="w-5 h-5" style={{ color: borderColor }} />
-                    <h2 className="font-bold text-sm tracking-widest uppercase" style={{ color: borderColor }}>
+                    <h2 className="font-display text-2xl tracking-widest uppercase" style={{ color: borderColor }}>
                         Flash Strategy
                     </h2>
                 </div>
-                {isAiThinking && <Loader2 className="w-4 h-4 animate-spin text-white/50" />}
+                {isAiThinking && <Loader2 className="w-4 h-4 animate-spin text-[var(--color-neon-accent)]/50" />}
              </div>
              
-             <p className="text-[#e3e3e3] text-sm leading-relaxed font-bold">
+             <p className="text-[var(--color-gallery-white)] text-sm leading-relaxed font-bold">
                 {aiHint}
              </p>
              
              {aiRationale && (
                  <div className="flex gap-2 mt-1">
-                     <Lightbulb className="w-4 h-4 text-[#a8c7fa] shrink-0 mt-0.5" />
-                     <p className="text-[#a8c7fa] text-xs italic opacity-90 leading-tight">
+                     <Lightbulb className="w-4 h-4 text-[var(--color-neon-accent)] shrink-0 mt-0.5" />
+                     <p className="text-[var(--color-neon-accent)] text-xs italic opacity-90 leading-tight">
                         {aiRationale}
                      </p>
                  </div>
              )}
              
              {aiRecommendedColor && (
-                <div className="flex items-center gap-2 mt-3 bg-black/20 p-2 rounded">
+                <div className="flex items-center gap-2 mt-3 bg-black/20 p-2 rounded-none">
                     <Target className="w-4 h-4 text-gray-400" />
                     <span className="text-xs text-gray-400 uppercase tracking-wide">Rec. Color:</span>
                     <span className="text-xs font-bold uppercase" style={{ color: COLOR_CONFIG[aiRecommendedColor].hex }}>
@@ -965,7 +967,7 @@ const GeminiSlingshot: React.FC = () => {
         </div>
 
         {/* DEBUG HEADER */}
-        <div className="p-3 border-b border-[#444746] bg-[#1e1e1e] flex items-center gap-2 text-[#757575]">
+        <div className="p-3 border-b-2 border-[var(--color-gallery-white)] bg-[var(--color-zinc-900)] flex items-center gap-2 text-gray-400">
             <Terminal className="w-4 h-4" />
             <span className="text-[10px] font-bold uppercase tracking-wider">Debugger</span>
         </div>
@@ -974,12 +976,12 @@ const GeminiSlingshot: React.FC = () => {
             
             {/* Status Section */}
             <div>
-                <div className="flex items-center gap-2 mb-2 text-[#c4c7c5] text-xs font-bold uppercase tracking-wider">
+                <div className="flex items-center gap-2 mb-2 text-gray-300 text-xs font-bold uppercase tracking-wider">
                     <BrainCircuit className="w-3 h-3" /> Status
                 </div>
-                <div className={`p-3 rounded-lg border ${isAiThinking ? 'bg-[#a8c7fa]/10 border-[#a8c7fa]/30 text-[#a8c7fa]' : 'bg-[#444746]/20 border-[#444746]/50 text-[#c4c7c5]'}`}>
+                <div className={`p-3 rounded-none border ${isAiThinking ? 'bg-[#a8c7fa]/10 border-[var(--color-neon-accent)] border-[var(--color-neon-accent)]/30 text-[var(--color-neon-accent)]' : 'bg-[var(--color-gallery-white)]/20 border-[var(--color-gallery-white)] border-[var(--color-gallery-white)]/50 text-gray-300'}`}>
                     <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${isAiThinking ? 'bg-[#a8c7fa] animate-pulse' : 'bg-[#66bb6a]'}`} />
+                        <div className={`w-2 h-2 rounded-none ${isAiThinking ? 'bg-[#a8c7fa] animate-pulse' : 'bg-[#ccff00]'}`} />
                         <span className="text-sm font-mono">{isAiThinking ? 'Processing Vision...' : 'Waiting for Input'}</span>
                     </div>
                 </div>
@@ -988,10 +990,10 @@ const GeminiSlingshot: React.FC = () => {
             {/* Vision Input */}
             {debugInfo?.screenshotBase64 && (
                 <div>
-                    <div className="flex items-center gap-2 mb-2 text-[#c4c7c5] text-xs font-bold uppercase tracking-wider">
+                    <div className="flex items-center gap-2 mb-2 text-gray-300 text-xs font-bold uppercase tracking-wider">
                         <Eye className="w-3 h-3" /> Vision Input
                     </div>
-                    <div className="rounded-lg overflow-hidden border border-[#444746] bg-black/50 relative group">
+                    <div className="rounded-none overflow-hidden border-2 border-[var(--color-gallery-white)] bg-black/50 relative group">
                          {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={debugInfo.screenshotBase64} alt="AI Vision" className="w-full h-auto opacity-80 group-hover:opacity-100 transition-opacity" />
                         <div className="absolute bottom-0 left-0 right-0 bg-black/70 p-1 text-[10px] text-center text-gray-400 font-mono">
@@ -1004,10 +1006,10 @@ const GeminiSlingshot: React.FC = () => {
             {/* Prompt Context */}
             {debugInfo?.promptContext && (
                 <div>
-                    <div className="flex items-center gap-2 mb-2 text-[#c4c7c5] text-xs font-bold uppercase tracking-wider">
+                    <div className="flex items-center gap-2 mb-2 text-gray-300 text-xs font-bold uppercase tracking-wider">
                         <Terminal className="w-3 h-3" /> Prompt Context
                     </div>
-                    <div className="bg-[#121212] p-3 rounded-lg border border-[#444746] font-mono text-[10px] text-gray-400 h-32 overflow-y-auto whitespace-pre-wrap leading-tight">
+                    <div className="bg-[var(--brutal-black)] p-3 rounded-none border-2 border-[var(--color-gallery-white)] font-mono text-[10px] text-gray-400 h-32 overflow-y-auto whitespace-pre-wrap leading-tight">
                         {debugInfo.promptContext}
                     </div>
                 </div>
@@ -1016,27 +1018,27 @@ const GeminiSlingshot: React.FC = () => {
             {/* AI Output Stats */}
             {debugInfo && (
                 <div>
-                    <div className="flex items-center gap-2 mb-2 text-[#c4c7c5] text-xs font-bold uppercase tracking-wider">
+                    <div className="flex items-center gap-2 mb-2 text-gray-300 text-xs font-bold uppercase tracking-wider">
                         <BrainCircuit className="w-3 h-3" /> AI Output
                     </div>
                     
                     <div className="grid grid-cols-2 gap-2 mb-3">
-                         <div className="bg-[#2a2a2a] p-2 rounded border border-[#444746]">
+                         <div className="bg-black p-2 rounded-none border-2 border-[var(--color-gallery-white)]">
                             <p className="text-[10px] text-gray-500 mb-1">Latency</p>
-                            <div className="flex items-center gap-1 text-[#a8c7fa] font-mono font-bold">
+                            <div className="flex items-center gap-1 text-[var(--color-neon-accent)] font-mono font-bold">
                                 {debugInfo.latency}ms
                             </div>
                          </div>
-                         <div className="bg-[#2a2a2a] p-2 rounded border border-[#444746]">
+                         <div className="bg-black p-2 rounded-none border-2 border-[var(--color-gallery-white)]">
                             <p className="text-[10px] text-gray-500 mb-1">Rec. Color</p>
-                            <div className="flex items-center gap-1 text-[#e3e3e3] font-mono font-bold capitalize">
+                            <div className="flex items-center gap-1 text-[var(--color-gallery-white)] font-mono font-bold capitalize">
                                 {debugInfo.parsedResponse?.recommendedColor || '--'}
                             </div>
                          </div>
                     </div>
 
                     {debugInfo.error && (
-                         <div className="bg-[#ef5350]/10 border border-[#ef5350]/30 p-3 rounded-lg mb-3">
+                         <div className="bg-[#ef5350]/10 border border-[#ef5350]/30 p-3 rounded-none mb-3">
                             <div className="flex items-start gap-2 text-[#ef5350]">
                                 <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
                                 <div>
@@ -1048,19 +1050,19 @@ const GeminiSlingshot: React.FC = () => {
                     )}
 
                     <p className="text-[10px] text-gray-500 mb-1">Raw Response Text</p>
-                    <div className="bg-[#121212] p-3 rounded-lg border border-[#444746] font-mono text-[11px] text-[#66bb6a] max-h-40 overflow-y-auto whitespace-pre-wrap mb-3 border-l-2 border-l-[#66bb6a]">
+                    <div className="bg-[var(--brutal-black)] p-3 rounded-none border-2 border-[var(--color-gallery-white)] font-mono text-[11px] text-[#ccff00] max-h-40 overflow-y-auto whitespace-pre-wrap mb-3 border-l-2 border-l-[#ccff00]">
                         {debugInfo.rawResponse}
                     </div>
 
                     <p className="text-[10px] text-gray-500 mb-1">Parsed JSON</p>
-                    <div className="bg-[#121212] p-3 rounded-lg border border-[#444746] font-mono text-[10px] text-[#a8c7fa] overflow-x-auto">
+                    <div className="bg-[var(--brutal-black)] p-3 rounded-none border-2 border-[var(--color-gallery-white)] font-mono text-[10px] text-[var(--color-neon-accent)] overflow-x-auto">
                         <pre>{JSON.stringify(debugInfo.parsedResponse || { error: "Failed to parse" }, null, 2)}</pre>
                     </div>
                 </div>
             )}
         </div>
         
-        <div className="p-3 bg-[#252525] border-t border-[#444746] text-center">
+        <div className="p-3 bg-[var(--color-zinc-800)] border-t-2 border-[var(--color-gallery-white)] text-center">
             <p className="text-[10px] text-gray-500 font-medium">Powered by Google Gemini 3 Flash</p>
         </div>
       </div>
