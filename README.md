@@ -4,6 +4,8 @@
 
   <h3>🎮 <a href="https://bilals-slingshot-352425888965.us-central1.run.app/">PLAY LIVE DEMO HERE</a> 🎮</h3>
 
+  <img width="800" alt="Gameplay Screenshot" src="./download.jpg" style="border-radius: 10px; margin: 15px 0;" />
+
   <p>
     <img src="https://img.shields.io/badge/Powered%20by-Gemini%203%20Flash-blue?style=for-the-badge&logo=google" alt="Gemini 3 Flash">
     <img src="https://img.shields.io/badge/Vision-MediaPipe-orange?style=for-the-badge&logo=google" alt="MediaPipe">
