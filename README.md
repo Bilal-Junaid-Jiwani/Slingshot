@@ -2,10 +2,6 @@
   
   <p><strong>A Next-Gen AI-Powered Webcam Bubble Shooter!</strong></p>
 
-  <h3>🎮 <a href="https://bilals-slingshot-352425888965.us-central1.run.app/">PLAY LIVE DEMO HERE</a> 🎮</h3>
-
-  <img width="800" alt="Gameplay Screenshot" src="./download.jpg" style="border-radius: 10px; margin: 15px 0;" />
-
   <p>
     <img src="https://img.shields.io/badge/Powered%20by-Gemini%203%20Flash-blue?style=for-the-badge&logo=google" alt="Gemini 3 Flash">
     <img src="https://img.shields.io/badge/Vision-MediaPipe-orange?style=for-the-badge&logo=google" alt="MediaPipe">
@@ -21,6 +17,10 @@
 **Bilal's Slingshot** is not your average bubble shooter. By combining **Google's MediaPipe Hand Tracking** with the insane reasoning speed of **Gemini 3 Flash**, your physical hands become the controller, and an AI co-pilot actively watches the board to give you real-time strategic advice!
 
 No keyboard. No mouse. Just **Pinch, Drag, and Shoot** with your actual hands in front of your webcam.
+
+<h3>🎮 <a href="https://bilals-slingshot-352425888965.us-central1.run.app/">PLAY LIVE DEMO HERE</a> 🎮</h3>
+
+  <img width="800" alt="Gameplay Screenshot" src="./download.jpg" style="border-radius: 10px; margin: 15px 0;" />
 
 ## ✨ Epic Features
 
